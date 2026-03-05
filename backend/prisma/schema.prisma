@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  password     String
+  name         String
+  reservations Reservation[]
+  orders       Order[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Product {
+  id            String         @id @default(uuid())
+  name          String
+  description   String
+  price         Float
+  totalStock    Int
+  currentStock  Int
+  imageUrl      String?
+  isActive      Boolean        @default(true)
+  reservations  Reservation[]
+  inventoryLogs InventoryLog[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Reservation {
+  id         String            @id @default(uuid())
+  userId     String
+  productId  String
+  quantity   Int
+  status     ReservationStatus @default(PENDING)
+  expiresAt  DateTime
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  user       User              @relation(fields: [userId], references: [id])
+  product    Product           @relation(fields: [productId], references: [id])
+  order      Order?
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  reservationId String      @unique
+  totalAmount   Float
+  status        OrderStatus @default(PENDING)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User        @relation(fields: [userId], references: [id])
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+}
+
+model InventoryLog {
+  id        String   @id @default(uuid())
+  productId String
+  change    Int
+  reason    String
+  stockBefore Int
+  stockAfter  Int
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+enum ReservationStatus {
+  PENDING
+  COMPLETED
+  EXPIRED
+  CANCELLED
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}

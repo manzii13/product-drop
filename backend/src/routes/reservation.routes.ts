@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { reserve, checkout, getMyReservations } from '../controllers/reservation.controller';
+import { authenticate } from '../middleware/auth';
+import { reserveLimiter } from '../middleware/rateLimiter';
+const router = Router();
+router.use(authenticate);
+router.post('/reserve', reserveLimiter, reserve);
+router.post('/checkout', checkout);
+router.get('/my', getMyReservations);
+export default router;
