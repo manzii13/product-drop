@@ -33,3 +33,11 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         next(err);
     }
 };
+
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        res.json({ success: true, message: 'Logged out successfully' });
+    } catch (err) {
+        next(err);
+    }
+};
