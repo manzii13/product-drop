@@ -8,9 +8,9 @@
 
 | Resource | URL |
 |---|---|
-|  Live App | [https://your-app.pxxl.app](https://pxxl.app) |
+|  Live App | [https://your-app.pxxl.app](product-drop.netlify.app) |
 |  GitHub | [[https://github.com/yourusername/product-drop](https://github.com/manzii13/product-drop.git)] |
-|  Loom Walkthrough | [5-8 min explanation](https://loom.com) |
+|  Loom Walkthrough | [5-8 min explanation]([https://loom.com](https://www.loom.com/share/d0a7f95bdfbc435ab06ed247344d113f)) |
 
 ---
 
