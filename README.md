@@ -1,20 +1,20 @@
-# ⚡ Limited-Stock Product Drop System
+#  Limited-Stock Product Drop System
 
 > A high-concurrency reservation system built to handle 100+ simultaneous users competing for limited stock — without overselling, race conditions, or data corruption.
 
 ---
 
-## 🔗 Links
+##  Links
 
 | Resource | URL |
 |---|---|
 |  Live App | [https://your-app.pxxl.app](https://pxxl.app) |
-|  GitHub | [https://github.com/yourusername/product-drop](https://github.com) |
+|  GitHub | [[https://github.com/yourusername/product-drop](https://github.com/manzii13/product-drop.git)] |
 |  Loom Walkthrough | [5-8 min explanation](https://loom.com) |
 
 ---
 
-## 🏗️ Architecture Overview
+##  Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -66,7 +66,7 @@
 │   │  Order   │  │  InventoryLog (full audit trail)         │  │
 │   └──────────┘  └──────────────────────────────────────────┘  │
 │                                                                 │
-│   🔒 Serializable Transactions (race condition prevention)      │
+│   Serializable Transactions (race condition prevention)      │
 └─────────────────────────────────────────────────────────────────┘
                           ▲
                           │
@@ -83,7 +83,7 @@
 
 ---
 
-## 🔒 How Race Conditions Were Handled
+##  How Race Conditions Were Handled
 
 This is the **most critical part** of the system. Here's the exact approach:
 
@@ -124,7 +124,7 @@ return await prisma.$transaction(async (tx) => {
 
 ---
 
-## 📐 Schema Design Decisions
+##  Schema Design Decisions
 
 ### Why a separate `InventoryLog` table?
 Every stock change (reservation, checkout, expiry) is logged with `stockBefore` and `stockAfter`. This creates a full audit trail — critical for debugging disputes ("why did my reservation fail?") and for reconciling stock discrepancies in production.
@@ -147,7 +147,7 @@ Storing the absolute expiry time makes queries simple: `WHERE expiresAt < NOW()`
 
 ---
 
-## ⚖️ Trade-offs
+##  Trade-offs
 
 | Decision | Benefit | Cost |
 |---|---|---|
@@ -160,7 +160,7 @@ Storing the absolute expiry time makes queries simple: `WHERE expiresAt < NOW()`
 
 ---
 
-## 💥 What Would Break at 10,000 Concurrent Users
+##  What Would Break at 10,000 Concurrent Users
 
 ### 1. Database Connection Pool Exhaustion
 PostgreSQL default max connections: ~100. At 10k users, connection pool fills up instantly. Every request that can't get a connection fails.
@@ -179,7 +179,7 @@ Every `/api/products` call hits PostgreSQL. At 10k users refreshing every 5 seco
 
 ---
 
-## 📈 How to Scale It
+##  How to Scale It
 
 ### Phase 1 — Vertical + Connection Pooling (0→1k users)
 ```
@@ -217,7 +217,7 @@ This decouples the burst of clicks from the DB writes
 
 ---
 
-## 🚀 Local Setup
+##  Local Setup
 
 ### Prerequisites
 - Node.js v18+
@@ -251,7 +251,7 @@ NODE_ENV=development
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 ### Auth
 | Method | Endpoint | Description |
@@ -271,9 +271,9 @@ NODE_ENV=development
 ### Reservations
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| POST | `/api/reserve` | ✅ | Reserve a product (5 min window) |
-| POST | `/api/checkout` | ✅ | Complete purchase |
-| GET | `/api/my` | ✅ | My reservations |
+| POST | `/api/reserve` |  | Reserve a product (5 min window) |
+| POST | `/api/checkout` |  | Complete purchase |
+| GET | `/api/my` |  | My reservations |
 
 ### System
 | Method | Endpoint | Description |
@@ -283,7 +283,7 @@ NODE_ENV=development
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 ### Backend
 ```bash
@@ -301,7 +301,7 @@ Tests cover: timer logic, API error handling, UI states
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 **Backend:** Node.js, Express, TypeScript, Prisma ORM, PostgreSQL, Zod, JWT, node-cron, bcryptjs
 
@@ -311,6 +311,4 @@ Tests cover: timer logic, API error handling, UI states
 
 ---
 
-## 👤 Author
 
-Built for the Full-Stack Developer Technical Assessment.
